@@ -17,9 +17,10 @@ def extrair_dados_dolar():
     dados = resposta.json()
     df_limpo = pd.DataFrame(dados['value'])
     
-
-    df_limpo['dataHoraCotacao'] = pd.to_datetime(df_limpo['dataHoraCotacao'])
-    df_limpo = df_limpo.sort_values(by='dataHoraCotacao')
+    df_limpo.rename(columns={'dataHoraCotacao' : 'Data'}, inplace=True)
+    df_limpo['Data'] = pd.to_datetime(df_limpo['Data']).dt.normalize()
+    df_limpo = df_limpo.sort_values(by='Data')
+    
 
     return df_limpo
 
@@ -35,7 +36,7 @@ def grafico(df_limpo):
   plt.figure(figsize=(12, 6))
   plt.style.use('seaborn-v0_8-whitegrid')
 
-  plt.plot(df_limpo['dataHoraCotacao'], df_limpo['cotacaoVenda'],color='red', label='Cotação Do Dolar')
+  plt.plot(df_limpo['Data'], df_limpo['cotacaoVenda'],color='red', label='Cotação Do Dolar')
   
   plt.title('Cotação do Dólar (PTAX) por Período', fontsize=14, fontweight='bold')
   plt.ylabel('Valor do Dólar (R$)', fontsize=12)

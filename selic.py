@@ -21,11 +21,11 @@ def extrair_dados_expectativa_selic(quantidade_amostra : int):
                         & (df_bruto['baseCalculo'] == 0)].drop(columns=['Indicador'])
     
 
-    df_limpo['Data'] = pd.to_datetime(df_limpo['Data'])
+    df_limpo['Data'] = pd.to_datetime(df_limpo['Data']).dt.normalize()
     df_limpo = df_limpo.sort_values(by='Data')
     return df_limpo
 
-df_selic = extrair_dados_expectativa_selic(1000)
+df_selic = extrair_dados_expectativa_selic(12000)
 print(df_selic)
 
 def grafico(df_limpo):
