@@ -28,6 +28,10 @@ def extrair_dados_expectativa_selic(quantidade_amostra : int):
 df_selic = extrair_dados_expectativa_selic(12000)
 print(df_selic)
 
+summary_stats = df_selic['Media'].describe()
+print(f"Summary: \n {summary_stats}")
+print(f"Primeira atualização: {df_selic['Data'].min()} \n Ultima atualização: {df_selic['Data'].max()}" )
+
 def grafico(df_limpo):
   
   plt.figure(figsize=(12, 6))
