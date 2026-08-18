@@ -1,56 +1,17 @@
 import pandas as pd
-import requests
-import matplotlib.pyplot as plt
 
-url_expectativas_selic = "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoSelic"
 
-def extrair_dados_expectativa_selic(quantidade_amostra : int):
-    parametros = {
-        "$format" : "json",
-        "$top" : quantidade_amostra
-    }
+data_inicio = '01/03/2025'
+data_fim = '18/08/2026'  
 
-    resposta = requests.get(url_expectativas_selic, params=parametros)
-
-    print(f"Status code : {resposta.status_code}")
-    dados = resposta.json()
-    df_bruto = pd.DataFrame(dados['value'])
-
-    df_limpo = df_bruto[(df_bruto['numeroRespondentes'] > 30) & 
-                        (df_bruto['Reuniao'].str.contains('R8/2026')) 
-                        & (df_bruto['baseCalculo'] == 0)].drop(columns=['Indicador'])
+def base_dados_selic(): 
     
+ url_selic = f'https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados?formato=json&dataInicial={data_inicio}&dataFinal={data_fim}'
+ df_selic = pd.read_json(url_selic)
+ print(df_selic)
+ df_selic['data'] = pd.to_datetime(df_selic['data'], format='%d/%m/%Y')
+ df_selic = df_selic.rename(columns={'valor' : 'Media', 'data' : 'Data'})
+ df_selic_resumo = df_selic[df_selic['Media'].diff() != 0].copy()
 
-    df_limpo['Data'] = pd.to_datetime(df_limpo['Data']).dt.normalize()
-    df_limpo = df_limpo.sort_values(by='Data')
-    return df_limpo
-
-df_selic = extrair_dados_expectativa_selic(12000)
-print(df_selic)
-
-summary_stats = df_selic['Media'].describe()
-print(f"Summary: \n {summary_stats}")
-print(f"Primeira atualização: {df_selic['Data'].min()} \n Ultima atualização: {df_selic['Data'].max()}" )
-
-def grafico(df_limpo):
-  
-  plt.figure(figsize=(12, 6))
-  plt.style.use('seaborn-v0_8-whitegrid')
-
-
-  plt.plot(df_limpo['Data'], df_limpo['Media'], color='#1f77b4', linewidth=2, label='Expectativa Média')
-
-  plt.fill_between(df_limpo['Data'], 
-                df_limpo['Media'] - df_limpo['DesvioPadrao'], 
-                df_limpo['Media'] + df_limpo['DesvioPadrao'],
-                color='#1f77b4', alpha=0.2, label='Volatilidade (Desvio Padrão)')
-
-  plt.title('Evolução das Expectativas da Selic (Reuniões de 2026)', fontsize=14, fontweight='bold')
-  plt.ylabel('Taxa Selic (%)', fontsize=12)
-  plt.xlabel('Data da Projeção', fontsize=12)
-  plt.legend()
-  plt.tight_layout()
-  print(plt.show())
-
-
-grafico(df_selic)
+ return df_selic_resumo
+print(base_dados_selic())
