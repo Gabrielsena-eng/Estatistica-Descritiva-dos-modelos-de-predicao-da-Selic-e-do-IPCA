@@ -9,9 +9,10 @@ def extrair_dados_expectativa_ipca():
     response = requests.get(url)
     dados = response.json()['value']
     
-    df_ipca = pd.DataFrame(dados)[['Data', 'Media']].copy()
-    df_ipca.columns = ['Data', 'IPCA_Media']
+    df_ipca = pd.DataFrame(dados)[['Data', 'Media', 'DataReferencia']].copy()
+    df_ipca.columns = ['Data', 'IPCA_Media','DataReferencia']
     df_ipca['Data'] = pd.to_datetime(df_ipca['Data'])
+    df_ipca['DataReferencia'] = pd.to_datetime(df_ipca['DataReferencia'], format="%m/%Y")
     df_ipca['IPCA_Media'] = pd.to_numeric(df_ipca['IPCA_Media'], errors='coerce')
     df_ipca = df_ipca.rename(columns={'IPCA_Media' : 'Media'})
     return df_ipca
@@ -20,7 +21,22 @@ df_ipca = extrair_dados_expectativa_ipca()
 print(df_ipca)
 
 # Resumo Das informações do DataFrame
-summary_stats = df_ipca['Media'].describe()
-print(summary_stats)
-print(f"Primeira atualização: {df_ipca['Data'].min()} \n Ultima atualização: {df_ipca['Data'].max()}" )
 
+
+
+
+
+def alinhar_dados_ipca():
+    df_filtrado = df_ipca[(df_ipca['DataReferencia'] >= '2025-03-01') & 
+                          (df_ipca['DataReferencia'] <= '2026-09-01')].copy()
+    df_filtrado = df_filtrado.drop(columns='Data')
+    df_filtrado = df_filtrado.rename(columns={'DataReferencia' : 'Data'})
+    
+    return df_filtrado
+
+df_ipca_ordenado = alinhar_dados_ipca()
+print(df_ipca_ordenado)
+
+print(f"Primeira atualização: {df_ipca_ordenado['Data'].min()} \n Ultima atualização: {df_ipca_ordenado['Data'].max()}" )
+summary_stats = df_ipca_ordenado['Media'].describe()
+print(summary_stats)
