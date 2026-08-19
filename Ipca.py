@@ -7,6 +7,13 @@ url_ipca = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.16122/dados?formato=j
 
 def base_dados_ipca():
     df_ipca = pd.read_json(url_ipca)
-    print(df_ipca)
+    df_ipca['data'] = pd.to_datetime(df_ipca['data'], format='%d/%m/%Y')
+    df_ipca = df_ipca.rename(columns={'data': 'Data', 'valor' : 'Media'})
+    df_ipca['Media'] = df_ipca['Media']
+
+    return df_ipca
+
+df_ipca = base_dados_ipca()
+print(df_ipca)
 
 
