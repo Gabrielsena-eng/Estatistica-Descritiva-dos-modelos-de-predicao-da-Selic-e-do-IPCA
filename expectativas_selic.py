@@ -17,7 +17,7 @@ def extrair_dados_expectativa_selic():
     df_bruto = pd.DataFrame(dados['value'])
 
     df_limpo = df_bruto[(df_bruto['numeroRespondentes'] > 30) & 
-                        (df_bruto['Reuniao'].str.contains('R8/2026')) 
+                        (df_bruto['Reuniao'].str.contains('R4/2026')) 
                         & (df_bruto['baseCalculo'] == 0)].drop(columns=['Indicador'])
     
 
