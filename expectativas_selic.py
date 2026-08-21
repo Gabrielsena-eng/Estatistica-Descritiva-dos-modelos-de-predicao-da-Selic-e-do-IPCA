@@ -38,25 +38,38 @@ summary_stats = df_expectativas_selic['Media'].describe()
 print(f"Summary: \n {summary_stats}")
 print(f"Primeira atualização: {df_expectativas_selic['Data'].min()} \n Ultima atualização: {df_expectativas_selic['Data'].max()}" )
 
-def grafico(df_limpo):
-  
-  plt.figure(figsize=(12, 6))
-  plt.style.use('seaborn-v0_8-whitegrid')
 
+def grafico_evolucao_expectativas_2026(df_expectativas_bruto):
+    plt.figure(figsize=(12, 6))
+    
+    # FILTRO NOVO: Mantém apenas as linhas onde o nome da Reunião tem "2026"
+    df_2026 = df_expectativas_bruto[df_expectativas_bruto['Reuniao'].str.contains('2026', na=False)].copy()
+    
+    # Pega apenas as reuniões de 2026 (R1/2026, R2/2026, etc.)
+    reunioes = df_2026['Reuniao'].unique()
+    
+    # Cria uma linha no gráfico para cada reunião de 2026
+    for reuniao in reunioes:
+        df_filtro = df_2026[df_2026['Reuniao'] == reuniao].copy()
+        df_filtro = df_filtro.sort_values(by='Data')
+        
+        plt.plot(df_filtro['Data'], df_filtro['Media'], label=reuniao, linewidth=1.5)
+    
+    # Textos e formatação
+    plt.title('Evolução Diária das Expectativas da Selic (Reuniões de 2026)', fontsize=14)
+    plt.xlabel('Data da Projeção')
+    plt.ylabel('Taxa Selic Esperada (%)')
+    
+    # Legenda para o lado de fora
+    plt.legend(title='Reunião', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.grid(True, alpha=0.5)
+    plt.tight_layout()
+    
+    # Salva o gráfico em vetor (PDF) para o Overleaf (não perde qualidade no zoom!)
+    plt.savefig('evolucao_selic_2026.pdf', format='pdf', bbox_inches='tight')
+    plt.show()
 
-  plt.plot(df_limpo['Data'], df_limpo['Media'], color='#1f77b4', linewidth=2, label='Expectativa Média')
+# Chamada da função:
+# grafico_evolucao_expectativas_2026(df_expectativas_todas)
 
-  plt.fill_between(df_limpo['Data'], 
-                df_limpo['Media'] - df_limpo['DesvioPadrao'], 
-                df_limpo['Media'] + df_limpo['DesvioPadrao'],
-                color='#1f77b4', alpha=0.2, label='Volatilidade (Desvio Padrão)')
-
-  plt.title('Evolução das Expectativas da Selic (Reuniões de 2026)', fontsize=14, fontweight='bold')
-  plt.ylabel('Taxa Selic (%)', fontsize=12)
-  plt.xlabel('Data da Projeção', fontsize=12)
-  plt.legend()
-  plt.tight_layout()
-  print(plt.show())
-
-
-grafico(df_expectativas_selic)
+grafico_evolucao_expectativas_2026(df_expectativas_selic)

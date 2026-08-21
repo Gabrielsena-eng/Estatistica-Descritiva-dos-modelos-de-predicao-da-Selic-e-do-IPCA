@@ -118,3 +118,24 @@ def plotar_barras_selic(df):
 
 # Chama a função passando exatamente o seu DataFrame
 plotar_barras_selic(df_comparacao_selic)
+
+
+def grafico_linha_simples(df):
+    plt.figure(figsize=(10, 5))
+    
+    # Plota as duas linhas
+    plt.plot(df['Reuniao'], df['Selic_Real'], marker='o', color='red', label='Selic Real')
+    plt.plot(df['Reuniao'], df['Media_Historica'], marker='s', color='blue', label='Expectativa (Média)')
+    
+    # Textos e legendas básicos
+    plt.title('Evolução: Selic Real vs Expectativa do Mercado', fontsize=14)
+    plt.xlabel('Reunião')
+    plt.ylabel('Taxa Selic (%)')
+    plt.legend()
+    plt.grid(True, alpha=0.5)
+    
+    plt.tight_layout()
+    plt.show()
+
+
+grafico_linha_simples(df_comparacao_selic)
