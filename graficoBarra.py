@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 from TabelaDeComparacao import df_comparacao_selic
 from TabelaDeComparacao import df_comparacao_ipca
@@ -41,16 +42,13 @@ def plotar_barras_comparacao(df, titulo):
     plt.show()
 
 plotar_barras_comparacao(df_comparacao_ipca, 'Teste')
-plotar_barras_comparacao(df_comparacao_selic, 'Teste')
 
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 def plotar_estatisticas_distribuicao(df_ipca, df_selic):
-    # Configuração do estilo visual
+    
     sns.set_theme(style="whitegrid")
     
-    # 1. Histograma (Distribuição de Frequência)
+    
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     
     sns.histplot(df_ipca['Media'], kde=True, ax=axes[0], color='#1f77b4', bins=30)
@@ -66,7 +64,7 @@ def plotar_estatisticas_distribuicao(df_ipca, df_selic):
     plt.tight_layout()
     plt.show()
     
-    # 2. Boxplot (Análise de Dispersão e Outliers)
+    
     fig, axes = plt.subplots(1, 2, figsize=(10, 5))
     
     sns.boxplot(y=df_ipca['Media'], ax=axes[0], color='#1f77b4')
@@ -81,5 +79,42 @@ def plotar_estatisticas_distribuicao(df_ipca, df_selic):
     plt.show()
 
 plotar_estatisticas_distribuicao(alinhar_dados_ipca(), extrair_dados_expectativa_selic())
-# Exemplo de chamada (Certifique-se de passar seus DataFrames limpos)
-# plotar_estatisticas_distribuicao(alinhar_dados_ipca(), extrair_dados_expectativa_selic())
+
+
+
+def plotar_barras_selic(df):
+    # Usar 'Reuniao' como índice facilita criar as barras agrupadas no pandas
+    df_plot = df.set_index('Reuniao')
+    
+    # Selecionamos apenas as duas colunas que queremos comparar
+    df_plot = df_plot[['Media_Historica', 'Selic_Real']]
+    
+    # Renomeamos as colunas apenas no df_plot para a legenda do gráfico ficar bonita
+    df_plot = df_plot.rename(columns={
+        'Media_Historica': 'Expectativa (Média)',
+        'Selic_Real': 'Realidade (BCB)'
+    })
+    
+    # Cria a figura e plota
+    fig, ax = plt.subplots(figsize=(12, 6))
+    df_plot.plot(
+        kind='bar', 
+        ax=ax, 
+        color=['#1f77b4', '#d62728'], 
+        width=0.7
+    )
+    
+    # Ajustes visuais
+    ax.set_title('Expectativa do Mercado vs Selic Realizada', fontsize=14, fontweight='bold')
+    ax.set_ylabel('Taxa Selic (%)', fontsize=12)
+    ax.set_xlabel('Reunião', fontsize=12)
+    
+    plt.xticks(rotation=0) # Deixa o texto R1/2026, R2/2026 na horizontal
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.legend(loc='upper right')
+    
+    plt.tight_layout()
+    plt.show()
+
+# Chama a função passando exatamente o seu DataFrame
+plotar_barras_selic(df_comparacao_selic)

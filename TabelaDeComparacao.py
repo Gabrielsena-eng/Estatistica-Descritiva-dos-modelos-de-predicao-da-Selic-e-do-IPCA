@@ -1,7 +1,7 @@
 import pandas as pd
 
-from selic import base_dados_selic
-from expectativas_selic import extrair_dados_expectativa_selic
+from selic import df_selic_resumo
+from expectativas_selic import df_expectativas_agrupadas
 from ipca import base_dados_ipca
 from expectativas_IPCA import extrair_dados_expectativa_ipca
 from expectativas_IPCA import alinhar_dados_ipca
@@ -29,7 +29,6 @@ def media_expectativa(df_expectativa, df_real):
  
  return df_media_expectativa
 
-df_media_expectativa_selic = media_expectativa(extrair_dados_expectativa_selic(), base_dados_selic())
 df_media_expectativa_ipca = media_expectativa(alinhar_dados_ipca(), base_dados_ipca())
 
 
@@ -49,8 +48,10 @@ def mesclagem_dataframes(df_media_expectativa, df_media_real):
    
    return df_comparacao
 
-df_comparacao_selic = mesclagem_dataframes(df_media_expectativa_selic, base_dados_selic())
+df_comparacao_selic = pd.merge(df_selic_resumo, df_expectativas_agrupadas, on='Reuniao', how='inner')
+df_comparacao_selic['Erro_Medio'] = df_comparacao_selic['Media_Historica'] - df_comparacao_selic['Selic_Real']
+df_comparacao_selic = df_comparacao_selic.sort_values(by='Data_Vigencia')
+print(df_comparacao_selic)
 df_comparacao_ipca = mesclagem_dataframes(df_media_expectativa_ipca, base_dados_ipca())
 
-print(df_comparacao_ipca)
-print(df_comparacao_selic)
+

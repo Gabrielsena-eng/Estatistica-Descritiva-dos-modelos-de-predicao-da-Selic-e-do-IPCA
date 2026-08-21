@@ -16,8 +16,7 @@ def extrair_dados_expectativa_selic():
     dados = resposta.json()
     df_bruto = pd.DataFrame(dados['value'])
 
-    df_limpo = df_bruto[(df_bruto['numeroRespondentes'] > 30) & 
-                        (df_bruto['Reuniao'].str.contains('R4/2026')) 
+    df_limpo = df_bruto[(df_bruto['numeroRespondentes'] > 30) 
                         & (df_bruto['baseCalculo'] == 0)].drop(columns=['Indicador'])
     
 
@@ -25,12 +24,19 @@ def extrair_dados_expectativa_selic():
     df_limpo = df_limpo.sort_values(by='Data')
     return df_limpo
 
-df_selic = extrair_dados_expectativa_selic()
-print(df_selic)
+df_expectativas_selic = extrair_dados_expectativa_selic()
 
-summary_stats = df_selic['Media'].describe()
+df_expectativas_agrupadas = df_expectativas_selic.groupby('Reuniao').agg(
+    Media_Historica=('Media', 'mean'),
+    Desvio_Padrao_Medio=('DesvioPadrao', 'mean'),
+    Qtd_Projeções=('Media', 'count')
+).reset_index()
+
+print(df_expectativas_agrupadas)
+
+summary_stats = df_expectativas_selic['Media'].describe()
 print(f"Summary: \n {summary_stats}")
-print(f"Primeira atualização: {df_selic['Data'].min()} \n Ultima atualização: {df_selic['Data'].max()}" )
+print(f"Primeira atualização: {df_expectativas_selic['Data'].min()} \n Ultima atualização: {df_expectativas_selic['Data'].max()}" )
 
 def grafico(df_limpo):
   
@@ -53,4 +59,4 @@ def grafico(df_limpo):
   print(plt.show())
 
 
-grafico(df_selic)
+grafico(df_expectativas_selic)
