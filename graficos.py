@@ -9,17 +9,30 @@ from TabelaDeComparacao import df_comparacao_ipca
 from expectativas_IPCA import alinhar_dados_ipca
 from expectativas_selic import extrair_dados_expectativa_selic
 from expectativas_IPCA import extrair_dados_expectativa_ipca
+from expectativas_selic import df_expectativas_selic
 
 
-def plotar_barras_comparacao(df, titulo):
-   
-    df['Data_str'] = df['Data'].dt.strftime('%Y-%m-%d')
+import matplotlib.pyplot as plt
+import pandas as pd
+
+def plotar_barras_ipca_2026(df_comparacao_ipca):
+    df_2026 = df_comparacao_ipca[df_comparacao_ipca['Data'].dt.year == 2026].copy()
     
+
+    df_2026 = df_2026.sort_values(by='Data')
+
+    df_2026['Data_str'] = df_2026['Data'].dt.strftime('%Y-%m')
     
+ 
+    df_2026 = df_2026.rename(columns={
+        'Media_Expectativa': 'Valor_esperado',
+        'IPCA_Real': 'Valor_Real'
+    })
+    
+
     fig, ax = plt.subplots(figsize=(12, 6))
     
-    
-    df.plot(
+    df_2026.plot(
         x='Data_str',
         y=['Valor_esperado', 'Valor_Real'],
         kind='bar',
@@ -28,20 +41,25 @@ def plotar_barras_comparacao(df, titulo):
         width=0.8
     )
     
+
+    ax.set_title('IPCA 2026: Expectativa do Mercado vs Realidade', fontsize=14, fontweight='bold')
+    ax.set_ylabel('Variação Mensal do IPCA (%)', fontsize=12)
+    ax.set_xlabel('Mês de Referência', fontsize=12)
     
-    ax.set_title(titulo, fontsize=14, fontweight='bold')
-    ax.set_ylabel('Taxa (%)', fontsize=12)
-    ax.set_xlabel('Data', fontsize=12)
-    
-    plt.xticks(rotation=45, ha='right')
+
+    plt.xticks(rotation=0, ha='center') 
     plt.legend(['Expectativa (Mercado)', 'Realidade (BCB)'])
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     
-    
     plt.tight_layout()
+    
+
+    
     plt.show()
 
-plotar_barras_comparacao(df_comparacao_ipca, 'Teste')
+
+
+plotar_barras_ipca_2026(df_comparacao_ipca)
 
 
 def plotar_estatisticas_distribuicao(df_ipca, df_selic):
@@ -139,3 +157,45 @@ def grafico_linha_simples(df):
 
 
 grafico_linha_simples(df_comparacao_selic)
+
+
+
+# Adicionei o df_realizado como segundo parâmetro para saber quais reuniões já passaram
+def grafico_evolucao_expectativas_2026(df_expectativas_bruto, df_realizado):
+    plt.figure(figsize=(12, 6))
+    
+    # 1. Pega a lista exata de reuniões que já têm a Selic Real (ex: ['R1/2026', 'R2/2026', ...])
+    reunioes_passadas = df_realizado['Reuniao'].unique()
+    
+    # 2. FILTRO DUPLO: Mantém apenas as linhas de 2026 E que estejam na lista de reuniões que já aconteceram
+    df_2026 = df_expectativas_bruto[
+        (df_expectativas_bruto['Reuniao'].str.contains('2026', na=False)) &
+        (df_expectativas_bruto['Reuniao'].isin(reunioes_passadas))
+    ].copy()
+    
+    # Pega apenas as reuniões de 2026 filtradas
+    reunioes = df_2026['Reuniao'].unique()
+    
+    # Cria uma linha no gráfico para cada reunião
+    for reuniao in reunioes:
+        df_filtro = df_2026[df_2026['Reuniao'] == reuniao].copy()
+        df_filtro = df_filtro.sort_values(by='Data')
+        
+        plt.plot(df_filtro['Data'], df_filtro['Media'], label=reuniao, linewidth=1.5)
+    
+    # Textos e formatação
+    plt.title('Evolução Diária das Expectativas (Apenas Reuniões Realizadas de 2026)', fontsize=14)
+    plt.xlabel('Data da Projeção')
+    plt.ylabel('Taxa Selic Esperada (%)')
+    
+    # Legenda para o lado de fora
+    plt.legend(title='Reunião', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.grid(True, alpha=0.5)
+    plt.tight_layout()
+    
+    # Salva o gráfico em vetor (PDF) para o Overleaf
+    plt.savefig('evolucao_selic_2026.pdf', format='pdf', bbox_inches='tight')
+    plt.show()
+
+# Chamada da função passando as expectativas brutas e a tabela de comparação (que tem os dados reais):
+grafico_evolucao_expectativas_2026(df_expectativas_selic, df_comparacao_selic)

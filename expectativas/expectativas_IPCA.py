@@ -18,6 +18,7 @@ def extrair_dados_expectativa_ipca():
     return df_ipca
 
 df_expectativas_ipca = extrair_dados_expectativa_ipca()
+df_expectativas_ipca.to_csv("Expectativas_ipca.csv", index=True)
 print(df_expectativas_ipca)
 
 # Resumo Das informações do DataFrame
@@ -35,6 +36,7 @@ def alinhar_dados_ipca():
     return df_filtrado
 
 df_ipca_ordenado = alinhar_dados_ipca()
+df_ipca_ordenado.to_csv("Expactativas_IPCA_resumo.csv", index=True)
 print(df_ipca_ordenado)
 
 print(f"Primeira atualização: {df_ipca_ordenado['Data'].min()} \n Ultima atualização: {df_ipca_ordenado['Data'].max()}" )

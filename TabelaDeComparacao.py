@@ -53,5 +53,6 @@ df_comparacao_selic['Erro_Medio'] = df_comparacao_selic['Media_Historica'] - df_
 df_comparacao_selic = df_comparacao_selic.sort_values(by='Data_Vigencia')
 print(df_comparacao_selic)
 df_comparacao_ipca = mesclagem_dataframes(df_media_expectativa_ipca, base_dados_ipca())
+print(df_comparacao_ipca)
 
 
