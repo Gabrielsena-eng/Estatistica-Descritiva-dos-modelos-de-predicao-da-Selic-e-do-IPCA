@@ -27,15 +27,5 @@ def extrair_dados_expectativa_selic():
 
 df_expectativas_selic = extrair_dados_expectativa_selic()
 
-df_expectativas_agrupadas = df_expectativas_selic.groupby('Reuniao').agg(
-    Media_Historica=('Media', 'mean'),
-    Desvio_Padrao_Medio=('DesvioPadrao', 'mean'),
-    Qtd_Projeções=('Media', 'count')
-).reset_index()
-
-
-summary_stats = df_expectativas_selic['Media'].describe()
-print(f"Summary: \n {summary_stats}")
-print(f"Primeira atualização: {df_expectativas_selic['Data'].min()} \n Ultima atualização: {df_expectativas_selic['Data'].max()}" )
 
 

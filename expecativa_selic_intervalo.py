@@ -18,16 +18,3 @@ def expectativas_intervalo_selic(meses, reuniao, dias):
     
 
 r1 = "R1/2026"
-
-print("========================== 5 MESES")
-df_R1_5_meses = expectativas_intervalo_selic(5,r1, 7)
-print(df_R1_5_meses)
-
-print("========================== 3 MESES")
-df_R1_3_meses = expectativas_intervalo_selic(3,r1, 7)
-print(df_R1_3_meses)
-
-print("========================== 1 MÊS")
-df_R1_1_meses = expectativas_intervalo_selic(1,r1, 7)
-print(df_R1_1_meses)
-
