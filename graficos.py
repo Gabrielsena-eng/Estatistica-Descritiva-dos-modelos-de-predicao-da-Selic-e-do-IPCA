@@ -6,10 +6,10 @@ import seaborn as sns
 
 from TabelaDeComparacao import df_comparacao_selic
 from TabelaDeComparacao import df_comparacao_ipca
-from expectativas_IPCA import alinhar_dados_ipca
-from expectativas_selic import extrair_dados_expectativa_selic
-from expectativas_IPCA import extrair_dados_expectativa_ipca
-from expectativas_selic import df_expectativas_selic
+from expectativas.expectativas_IPCA import alinhar_dados_ipca
+from expectativas.expectativas_selic import extrair_dados_expectativa_selic
+from expectativas.expectativas_IPCA import extrair_dados_expectativa_ipca
+from expectativas.expectativas_selic import df_expectativas_selic
 
 
 import matplotlib.pyplot as plt

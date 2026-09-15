@@ -21,10 +21,6 @@ df_expectativas_ipca = extrair_dados_expectativa_ipca()
 df_expectativas_ipca.to_csv("Expectativas_ipca.csv", index=True)
 print(df_expectativas_ipca)
 
-# Resumo Das informações do DataFrame
-
-
-
 
 
 def alinhar_dados_ipca():

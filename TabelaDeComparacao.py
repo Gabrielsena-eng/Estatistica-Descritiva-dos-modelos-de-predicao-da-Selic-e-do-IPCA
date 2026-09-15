@@ -1,10 +1,10 @@
 import pandas as pd
 
-from selic import df_selic_resumo
-from expectativas_selic import df_expectativas_agrupadas
-from ipca import base_dados_ipca
-from expectativas_IPCA import extrair_dados_expectativa_ipca
-from expectativas_IPCA import alinhar_dados_ipca
+from Indices.selic import df_selic_resumo
+from expectativas.expectativas_selic import df_expectativas_agrupadas
+from Indices.ipca import base_dados_ipca
+from expectativas.expectativas_IPCA import extrair_dados_expectativa_ipca
+from expectativas.expectativas_IPCA import alinhar_dados_ipca
 
 def media_expectativa(df_expectativa, df_real):
  bins = df_real['Data'].tolist()

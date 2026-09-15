@@ -26,7 +26,6 @@ def extrair_dados_expectativa_selic():
     return df_limpo
 
 df_expectativas_selic = extrair_dados_expectativa_selic()
-df_expectativas_selic.to_csv("Expectativas_Selic.csv", index=True)
 
 df_expectativas_agrupadas = df_expectativas_selic.groupby('Reuniao').agg(
     Media_Historica=('Media', 'mean'),
@@ -34,8 +33,6 @@ df_expectativas_agrupadas = df_expectativas_selic.groupby('Reuniao').agg(
     Qtd_Projeções=('Media', 'count')
 ).reset_index()
 
-df_expectativas_agrupadas.to_csv("expecativas_selic_agrupada.csv", index=True)
-print(df_expectativas_agrupadas)
 
 summary_stats = df_expectativas_selic['Media'].describe()
 print(f"Summary: \n {summary_stats}")
