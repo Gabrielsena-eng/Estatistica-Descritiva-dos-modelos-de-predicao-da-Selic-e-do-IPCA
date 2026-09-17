@@ -1,8 +1,25 @@
 import pandas as pd
+import sys
+from pathlib import Path
 
-from expecativa_selic_intervalo import expectativas_intervalo_selic
-from Indices.selic import df_selic_resumo
+import sys
+from pathlib import Path
 
+# Subindo os níveis até a pasta raiz 'Expectativas De Mercado Selic'
+# (Subindo de 'tabela_de_periodos.py' -> 'resumos' -> 'Projeto' -> Raiz)
+RAIZ_PROJETO = Path(__file__).resolve().parent.parent.parent
+
+if str(RAIZ_PROJETO) not in sys.path:
+    sys.path.append(str(RAIZ_PROJETO))
+
+# Adiciona também a pasta 'Projeto' para buscas internas
+PASTA_PROJETO = RAIZ_PROJETO / "Projeto"
+if str(PASTA_PROJETO) not in sys.path:
+    sys.path.append(str(PASTA_PROJETO))
+
+# Imports com o caminho completo a partir das raízes resolvidas:
+from SELIC.expectativas.expecativa_selic_intervalo import expectativas_intervalo_selic
+from Indices.selic import df_selic_resumo  
 
 df_para_merge = df_selic_resumo[['Reuniao', 'Selic_Real']]
 
@@ -21,7 +38,7 @@ def compilar_dados_selic(Quantidade_reuniao):
     
   df_central = pd.concat(lista_dfs, ignore_index=True)
   df_merge = pd.merge(df_central, df_para_merge, on="Reuniao", how="left")
-  df_merge = df_merge[['Reuniao', 'Media', 'Mes_Expectativa', 'Selic_Real']]
+  df_merge = df_merge[['Reuniao', 'Media', 'Mes_Expectativa', 'Selic_Real', 'Data']]
   return df_merge
 
 df_completo = compilar_dados_selic(5)
