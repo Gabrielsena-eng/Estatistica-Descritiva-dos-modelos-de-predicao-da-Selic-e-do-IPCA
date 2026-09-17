@@ -56,7 +56,7 @@ def plotar_barras_ipca_2026(df_comparacao_ipca):
 
     
     plt.show()
-
+ 
 
 
 plotar_barras_ipca_2026(df_comparacao_ipca)
