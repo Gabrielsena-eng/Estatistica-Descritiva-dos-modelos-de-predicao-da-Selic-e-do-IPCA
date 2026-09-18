@@ -22,6 +22,7 @@ from SELIC.expectativas.expecativa_selic_intervalo import expectativas_intervalo
 from Indices.selic import df_selic_resumo  
 
 df_para_merge = df_selic_resumo[['Reuniao', 'Selic_Real']]
+print(df_para_merge)
 
 def compilar_dados_selic(Quantidade_reuniao):
   lista_dfs = []
@@ -42,21 +43,23 @@ def compilar_dados_selic(Quantidade_reuniao):
   return df_merge
 
 df_completo = compilar_dados_selic(5)
-print(df_completo)
+
+
 
 
 def tabela_resumo_tempo_selic (Quantidade_reuniao):
     dados = []
     
 
-    for i in range(1, Quantidade_reuniao + 2):
+    for i in range(1, Quantidade_reuniao + 1):
      reuniao = f"R{i}/2026"
      linha = {'Reuniao': reuniao}
      
 
      for j in range(1, 6, 2):
-       media =  "{:.2f}".format(expectativas_intervalo_selic(j, reuniao, 1)['Media'].mean())
+       media =  "{:.2f}".format(expectativas_intervalo_selic(j, reuniao, 7)['Media'].mean())
        linha[f'Mes_{j}'] = media
+       
 
      dados.append(linha)
 
@@ -65,3 +68,5 @@ def tabela_resumo_tempo_selic (Quantidade_reuniao):
     df_merge = df_merge[['Reuniao', 'Selic_Real', 'Mes_1', 'Mes_3', 'Mes_5' ]]
     return df_merge
 
+df_completo_media = tabela_resumo_tempo_selic(6)
+print(df_completo_media)
