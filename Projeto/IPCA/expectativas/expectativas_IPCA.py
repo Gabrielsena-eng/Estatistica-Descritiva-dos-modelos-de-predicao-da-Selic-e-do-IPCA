@@ -21,6 +21,6 @@ def extrair_dados_expectativa_ipca():
     return df_filtrado
 
 df_expectativas_ipca = extrair_dados_expectativa_ipca()
-df_expectativas_ipca.to_csv("Expectativas_ipca.csv", index=False)
+
 print(df_expectativas_ipca)
 
