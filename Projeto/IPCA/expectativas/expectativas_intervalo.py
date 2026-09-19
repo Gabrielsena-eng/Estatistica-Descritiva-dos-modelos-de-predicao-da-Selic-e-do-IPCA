@@ -1,12 +1,10 @@
 import pandas as pd
-from pathlib import Path
 
 
+from expectativas.expectativas_IPCA import extrair_dados_expectativa_ipca
 
-from expectativas_IPCA import extrair_dados_expectativa_ipca
 
-
-def extraor_intervalos_IPCA(meses, data_referencia, dias):
+def extrair_intervalos_IPCA(meses, data_referencia, dias):
     df_bruto = extrair_dados_expectativa_ipca()
     df_bruto = df_bruto[df_bruto['DataReferencia'] == pd.to_datetime(data_referencia) ]
     ultima_atualizacao = df_bruto['DataReferencia'].max()
@@ -18,6 +16,6 @@ def extraor_intervalos_IPCA(meses, data_referencia, dias):
 
     return df_filtrado
 
-print(extraor_intervalos_IPCA(5, '2026-01-01', 7))
+print(extrair_intervalos_IPCA(5, '2026-01-01', 7))
 
     

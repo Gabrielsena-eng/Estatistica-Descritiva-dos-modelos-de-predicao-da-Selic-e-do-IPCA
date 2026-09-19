@@ -5,9 +5,8 @@ from openpyxl.workbook import Workbook
 import sys
 from pathlib import Path
 
-# Subindo os níveis até a pasta raiz 'Expectativas De Mercado Selic'
 # (Subindo de 'tabela_de_periodos.py' -> 'resumos' -> 'Projeto' -> Raiz)
-RAIZ_PROJETO = Path(__file__).resolve().parent.parent.parent
+RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 
 if str(RAIZ_PROJETO) not in sys.path:
     sys.path.append(str(RAIZ_PROJETO))
@@ -32,7 +31,7 @@ tabela_erro = df_completo.pivot_table(
 tabela_erro = tabela_erro[['Mes_5', 'Mes_3', 'Mes_1']]
 
 # 4. Aplica a estilização nativa do Pandas (Formatação Condicional)
-# O cmap 'vlag' ou 'coolwarm' centraliza o zero. Vermelho = superestimou, Azul = subestimou.
+# Vermelho = superestimou, Azul = subestimou.
 tabela_estilizada = tabela_erro.style\
     .background_gradient(cmap='vlag', axis=None, vmin=-2, vmax=2)\
     .format("{:+.2f}")\
@@ -47,9 +46,6 @@ tabela_estilizada = tabela_erro.style\
         'selector': 'td',
         'props': [('text-align', 'center'), ('font-weight', 'bold'), ('padding', '10px'), ('border', '1px solid white')]
     }])
-
-# No Jupyter Notebook ou Google Colab, basta chamar a variável para renderizar a tabela visual
-tabela_estilizada
 
 with open('matriz_erro.html', 'w', encoding='utf-8') as f:
     f.write(tabela_estilizada.to_html())
