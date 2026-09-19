@@ -16,6 +16,5 @@ def extrair_intervalos_IPCA(meses, data_referencia, dias):
 
     return df_filtrado
 
-print(extrair_intervalos_IPCA(5, '2026-01-01', 7))
 
     

@@ -13,7 +13,4 @@ def base_dados_ipca():
 
     return df_ipca
 
-df_ipca = base_dados_ipca()
-print(df_ipca)
-
 

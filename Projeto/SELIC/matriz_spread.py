@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 # (Subindo de 'tabela_de_periodos.py' -> 'resumos' -> 'Projeto' -> Raiz)
-RAIZ_PROJETO = Path(__file__).resolve().parent.parent
+RAIZ_PROJETO = Path(__file__).resolve().parent.parent.parent
 
 if str(RAIZ_PROJETO) not in sys.path:
     sys.path.append(str(RAIZ_PROJETO))

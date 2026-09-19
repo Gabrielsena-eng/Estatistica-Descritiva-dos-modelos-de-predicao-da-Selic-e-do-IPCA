@@ -25,5 +25,5 @@ def expectativas_intervalo_selic(meses, reuniao, dias):
 r1 = "R1/2026"
 
 df_completo = expectativas_intervalo_selic(5,r1, 7)
-print(df_completo)
+
 

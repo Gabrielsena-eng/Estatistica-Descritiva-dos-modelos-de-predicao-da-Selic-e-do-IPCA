@@ -21,17 +21,14 @@ def compilar_dados_IPCA (quantidade_inflacoes):
         data_referencia = f'2026-{i:02d}-01'
         for j in range(1, 6, 2):
             df_temp = extrair_intervalos_IPCA(j, data_referencia, 7)
-            df_temp['Mes_Expectativa'] = f'mes_{j}'
+            df_temp['Mes_Expectativa'] = f'Mes_{j}'
 
             lista_dfs.append(df_temp)
 
     df_central = pd.concat(lista_dfs, ignore_index=True)
     df_merge = pd.merge(df_central, base_dados_ipca(), on='DataReferencia', how="left")
-    df_merge = df_merge.rename(columns={ 'Media' : 'IPCA_real'})
+    df_merge = df_merge.rename(columns={ 'Media' : 'IPCA_Real'})
 
     return df_merge
-    
 
 
-df_resumo = compilar_dados_IPCA(5)
-print(df_resumo)
