@@ -2,22 +2,16 @@ import pandas as pd
 import sys
 from pathlib import Path
 
-import sys
-from pathlib import Path
-
-# Subindo os níveis até a pasta raiz 'Expectativas De Mercado Selic'
-# (Subindo de 'tabela_de_periodos.py' -> 'resumos' -> 'Projeto' -> Raiz)
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent.parent
 
 if str(RAIZ_PROJETO) not in sys.path:
     sys.path.append(str(RAIZ_PROJETO))
 
-# Adiciona também a pasta 'Projeto' para buscas internas
 PASTA_PROJETO = RAIZ_PROJETO / "Projeto"
 if str(PASTA_PROJETO) not in sys.path:
     sys.path.append(str(PASTA_PROJETO))
 
-# Imports com o caminho completo a partir das raízes resolvidas:
+
 from SELIC.expectativas.expecativa_selic_intervalo import expectativas_intervalo_selic
 from Indices.selic import df_selic_resumo  
 
@@ -30,7 +24,7 @@ def compilar_dados_selic(Quantidade_reuniao):
     reuniao = f"R{i}/2026"
     
     for j in range(1, 6, 2):
-      df_temp = expectativas_intervalo_selic(j, reuniao, 15)
+      df_temp = expectativas_intervalo_selic(j, reuniao, 7)
       df_temp['Mes_Expectativa'] = f"Mes_{j}"
 
       lista_dfs.append(df_temp)
@@ -58,7 +52,7 @@ def tabela_resumo_tempo_selic (Quantidade_reuniao):
 
      for j in range(1, 6, 2):
        media =  "{:.2f}".format(expectativas_intervalo_selic(j, reuniao, 7)['Media'].mean())
-       linha[f'Mes_{j}'] = media
+       linha[f'Mes_{j}'] = float(media)
        
 
      dados.append(linha)
