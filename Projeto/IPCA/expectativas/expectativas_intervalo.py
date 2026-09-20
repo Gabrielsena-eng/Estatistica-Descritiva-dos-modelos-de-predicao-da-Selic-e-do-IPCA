@@ -17,4 +17,7 @@ def extrair_intervalos_IPCA(meses, data_referencia, dias):
     return df_filtrado
 
 
+
+
+
     

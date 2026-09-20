@@ -1,12 +1,14 @@
 import pandas as pd
 import seaborn as sns
 
-from intervalos.tabela_intervalos import compilar_dados_IPCA
+from tabela_intervalos import compilar_dados_IPCA
 
 df_completo = compilar_dados_IPCA(9)
+df_erro = pd.DataFrame()
 
-df_completo['Erro_Previsao'] = df_completo['IPCA_Media'] - df_completo['IPCA_Real']
-df_completo.to_csv('df_intervalo_IPCA.csv', index=False)
+df_erro['DataReferencia'] = df_completo['DataReferencia']
+
+
 
 tabela_erro = df_completo.pivot_table(
     index='DataReferencia', 
