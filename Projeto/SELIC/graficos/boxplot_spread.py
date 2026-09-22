@@ -33,9 +33,12 @@ sns.boxplot(
 # A linha do zero é o alvo absoluto
 plt.axhline(0, color='#A31621', linestyle='--', linewidth=2, label='Convergência Perfeita (Erro Zero)')
 
-plt.title('Compressão da Incerteza: Distribuição do Erro de Previsão por Distância', fontsize=14, fontweight='bold')
-plt.xlabel('Distância até a Reunião', fontsize=12)
-plt.ylabel('Dispersão do Erro (Pontos Percentuais)', fontsize=12)
+rotulos_apresentacao = ['5 Meses Antes', '3 Meses Antes', '1 Mês Antes']
+plt.xticks(ticks=range(len(ordem_tempo)), labels=rotulos_apresentacao, fontsize=11)
+
+plt.title('Distribuição do Erro de Previsão do SELIC por Antecedência', fontsize=14, fontweight='bold')
+plt.xlabel('Horizonte de Previsão', fontsize=12)
+plt.ylabel('Erro de Previsão (Pontos Percentuais)', fontsize=12)
 
 plt.legend()
 plt.tight_layout()

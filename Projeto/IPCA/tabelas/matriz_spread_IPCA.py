@@ -1,31 +1,28 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
-from openpyxl.workbook import Workbook
 import sys
 from pathlib import Path
 import dataframe_image as dfi
 
-RAIZ_PROJETO = Path(__file__).resolve().parent.parent.parent
-
-if str(RAIZ_PROJETO) not in sys.path:
-    sys.path.append(str(RAIZ_PROJETO))
 
 
-PASTA_PROJETO = RAIZ_PROJETO / "Projeto"
-if str(PASTA_PROJETO) not in sys.path:
-    sys.path.append(str(PASTA_PROJETO))
+diretorio_projeto = Path(__file__).resolve().parent.parent
+if str(diretorio_projeto) not in sys.path:
+    sys.path.append(str(diretorio_projeto))
 
+from intervalos.media_intervalos import media_intervalos_IPCA    
 
-from tabela_de_periodos import df_completo_media
-
+df_completo_media = media_intervalos_IPCA()
+df_completo_media['DataReferencia'] = pd.to_datetime(df_completo_media['DataReferencia']).dt.strftime('%m/%Y')
 df_erro = pd.DataFrame()
 
-df_erro['Reuniao'] = df_completo_media['Reuniao']
 
-df_erro['Erro_Mes_1'] = df_completo_media['Mes_1'] - df_completo_media['Selic_Real']
-df_erro['Erro_Mes_3'] = df_completo_media['Mes_3'] - df_completo_media['Selic_Real']
-df_erro['Erro_Mes_5'] = df_completo_media['Mes_5'] - df_completo_media['Selic_Real']
+df_erro['DataReferencia'] = df_completo_media['DataReferencia']
+
+df_erro['Erro_Mes_1'] = df_completo_media['Mes_1'] - df_completo_media['IPCA_Real']
+df_erro['Erro_Mes_3'] = df_completo_media['Mes_3'] - df_completo_media['IPCA_Real']
+df_erro['Erro_Mes_5'] = df_completo_media['Mes_5'] - df_completo_media['IPCA_Real']
+
 
 print(df_erro)
 
@@ -34,23 +31,23 @@ print(df_erro)
 tabela_erro = df_erro.copy()
 
 tabela_erro = tabela_erro.rename(columns={
-    'Reuniao' : 'Reunião',
+    'DataReferencia' : 'Mês inflação',
     'Erro_Mes_5': '5 Meses Antes',
     'Erro_Mes_3': '3 Meses Antes',
     'Erro_Mes_1': '1 Mês Antes'
 })
-tabela_erro.index.name = 'Reunião'
+tabela_erro.index.name = 'Mês inflação'
 
 
 colunas_valores = ['5 Meses Antes', '3 Meses Antes', '1 Mês Antes']
-tabela_erro = tabela_erro[['Reunião'] + colunas_valores]
+tabela_erro = tabela_erro[['Mês inflação'] + colunas_valores]
 
 
 tabela_estilizada = tabela_erro.style\
     .hide(axis='index')\
-    .background_gradient(cmap='vlag', axis=None, vmin=-2, vmax=2, subset=colunas_valores)\
+    .background_gradient(cmap='vlag', axis=None, vmin=-0.20, vmax=0.20, subset=colunas_valores)\
     .format("{:+.2f}", subset=colunas_valores)\
-    .set_caption("Spread de Previsão da Selic (Mercado vs Realidade)")\
+    .set_caption("Spread de Previsão do IPCA (Mercado vs Realidade)")\
     .set_table_styles([{
         'selector': 'caption',
         'props': [

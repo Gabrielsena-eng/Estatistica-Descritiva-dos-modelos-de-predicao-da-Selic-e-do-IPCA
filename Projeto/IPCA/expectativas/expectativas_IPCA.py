@@ -5,7 +5,7 @@ data_inicial_filtro = "2025-07-01"
 
 def extrair_dados_expectativa_ipca():
     print("Baixando Expectativas do IPCA (Focus)...")
-    url = f"https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativaMercadoMensais?$filter=Indicador%20eq%20'IPCA'%20and%20Data%20ge%20'{data_inicial_filtro}'&$orderby=Data%20asc&$top=20000&$format=json"
+    url = f"https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativaMercadoMensais?$filter=Indicador%20eq%20'IPCA'%20and%20Data%20ge%20'{data_inicial_filtro}'&$orderby=Data%20asc&$top=30000&$format=json"
     response = requests.get(url)
     dados = response.json()['value']
     
@@ -21,4 +21,5 @@ def extrair_dados_expectativa_ipca():
     return df_filtrado
 
 df_expectativas_ipca = extrair_dados_expectativa_ipca()
+print(df_expectativas_ipca)
 

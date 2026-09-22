@@ -10,7 +10,7 @@ RAIZ_PROJETO = Path(__file__).resolve().parent.parent.parent
 if str(RAIZ_PROJETO) not in sys.path:
     sys.path.append(str(RAIZ_PROJETO))
 
-from expectativas.expectativas_intervalo import extrair_intervalos_IPCA
+from IPCA.expectativas.expectativas_intervalo import extrair_intervalos_IPCA
 from Indices.ipca import base_dados_ipca
 
 def compilar_dados_IPCA (quantidade_inflacoes):
@@ -30,5 +30,7 @@ def compilar_dados_IPCA (quantidade_inflacoes):
     df_merge = df_merge.rename(columns={ 'Media' : 'IPCA_Real'})
 
     return df_merge
+
+print(compilar_dados_IPCA(9))
 
 

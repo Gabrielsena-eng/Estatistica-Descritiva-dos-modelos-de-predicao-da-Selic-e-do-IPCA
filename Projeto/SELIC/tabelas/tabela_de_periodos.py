@@ -1,6 +1,7 @@
 import pandas as pd
 import sys
 from pathlib import Path
+import dataframe_image as dfi
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent.parent
 
@@ -60,7 +61,10 @@ def tabela_resumo_tempo_selic (Quantidade_reuniao):
 
     df_merge = pd.merge(pd.DataFrame(dados), df_para_merge, on='Reuniao', how='inner')
     df_merge = df_merge[['Reuniao', 'Selic_Real', 'Mes_1', 'Mes_3', 'Mes_5' ]]
+
+    
     return df_merge
 
 df_completo_media = tabela_resumo_tempo_selic(6)
-print(df_completo_media)
+dfi.export(df_completo_media, "tabela_media_SELIC.png")
+
